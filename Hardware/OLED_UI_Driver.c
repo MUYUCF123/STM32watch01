@@ -187,10 +187,10 @@ int16_t Encoder_Get(void)
     encoderAccumulator += temp;
     
     // 计算四倍频解码后的增量值（去除未完成的部分）
-    int16_t result = encoderAccumulator / 4;
+    int16_t result = encoderAccumulator >> 2;
     
     // 保存未被4整除的余数，保证精度
-    encoderAccumulator %= 4;
+    encoderAccumulator &= 3;
     
     // 返回解码后的增量值
     return result;
