@@ -222,19 +222,20 @@ void OLED_UI_FadeOut_Masking(int16_t x0, int16_t y0, int16_t width, int16_t heig
     int16_t xEnd = x0 + width;
     int16_t yEnd = y0 + height;
 
+    const uint8_t (*pattern)[2] = patterns[fadeLevel - 1];  // é¢„å…ˆè·å–å½“å‰æ¨¡å¼ï¼Œé¿å…é‡å¤ç´¢å¼•
     // Ó¦ÓÃ½¥ÒşĞ§¹û
     for (int16_t y = y0; y < yEnd; y++) {
-        int page = y / 8;
-        int bit_pos = y % 8;
+        int page = y >> 3;           // ï¿½Å»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê§ï¿½ï¿½ï¿½ï¿½
+        int bit_pos = y & 7;         // ï¿½Å»ï¿½ï¿½ï¿½Î»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä£
         uint8_t pixel_mask = 1 << bit_pos;
+        int grid_y = (y - y0) & 1;   // ï¿½Å»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ú¼ï¿½Ñ­ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Î»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä£2
         
         for (int16_t x = x0; x < xEnd; x++) {
             // ¼ÆËãÔÚ2x2Íø¸ñÖĞµÄÏà¶ÔÎ»ÖÃ
-            int grid_x = (x - x0) % 2;
-            int grid_y = (y - y0) % 2;
+            int grid_x = (x - x0) & 1;   // ï¿½Å»ï¿½ï¿½ï¿½Î»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä£2
             
             // ¸ù¾İ½¥Òş¼¶±ğºÍÍø¸ñÎ»ÖÃ¾ö¶¨ÊÇ·ñÏ¨ÃğÏñËØ
-            if (patterns[fadeLevel - 1][grid_y][grid_x]) {
+            if (pattern[grid_y][grid_x]) {
                 OLED_DisplayBuf[page][x] &= ~pixel_mask;
             }
         }

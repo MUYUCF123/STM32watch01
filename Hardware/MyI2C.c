@@ -12,7 +12,7 @@
 void MyI2C_W_SCL(uint8_t BitValue)
 {
 	GPIO_WriteBit(GPIOB, GPIO_Pin_10, (BitAction)BitValue);		//根据BitValue，设置SCL引脚的电平
-	Delay_us(10);												//延时10us，防止时序频率超过要求
+	Delay_us(5);												//延时5us，优化后仍满足I2C标准100kHz要求（最小周期10us）
 }
 
 /**
@@ -24,7 +24,7 @@ void MyI2C_W_SCL(uint8_t BitValue)
 void MyI2C_W_SDA(uint8_t BitValue)
 {
 	GPIO_WriteBit(GPIOB, GPIO_Pin_11, (BitAction)BitValue);		//根据BitValue，设置SDA引脚的电平，BitValue要实现非0即1的特性
-	Delay_us(10);												//延时10us，防止时序频率超过要求
+	Delay_us(5);												//延时5us，优化后仍满足I2C标准100kHz要求（最小周期10us）
 }
 
 /**
@@ -37,7 +37,7 @@ uint8_t MyI2C_R_SDA(void)
 {
 	uint8_t BitValue;
 	BitValue = GPIO_ReadInputDataBit(GPIOB, GPIO_Pin_11);		//读取SDA电平
-	Delay_us(10);												//延时10us，防止时序频率超过要求
+	Delay_us(5);												//延时5us，优化后仍满足I2C标准100kHz要求（最小周期10us）
 	return BitValue;											//返回SDA电平
 }
 
